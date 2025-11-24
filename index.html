@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Livre A4 / A3 - Images Pleine Page</title>
+<title>Livre A4 / A3 - Pages Pleines</title>
 <style>
 body {
   margin: 0;
@@ -43,20 +43,20 @@ nav button:hover {
   width: 80vw;
   max-width: 1200px;
   aspect-ratio: 2 / 1.414;
-  overflow-x: auto; /* scroll horizontal sur mobile */
-  overflow-y: hidden;
+  overflow: hidden;
   position: relative;
   margin: auto;
   flex: 1;
   background: #e6e6e6; /* fond gris uniforme */
   display: flex;
+  justify-content: center;
   align-items: center;
-  scroll-snap-type: x mandatory;
 }
 
 /* Book slider */
 .book {
   display: flex;
+  transition: transform 0.6s ease;
   height: 100%;
   transform-origin: center center;
 }
@@ -69,7 +69,7 @@ nav button:hover {
   width: 100%;
   flex-shrink: 0;
   gap: 10px;
-  scroll-snap-align: start;
+  overflow: hidden;
 }
 
 /* Page au format A4 */
@@ -89,24 +89,50 @@ nav button:hover {
 .page img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* jamais rognée, remplie la page */
+  object-fit: cover; /* remplit toute la page, centrée */
   display: block;
 }
 
-/* Mobile : double page verticale et page plus large */
+/* Mobile : scroll horizontal par page */
 @media (max-width: 800px) {
   .book-container {
     width: 90vw;
     height: 80vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory; /* scroll par page */
   }
+
+  .book {
+    flex-direction: row;
+    height: 100%;
+  }
+
+  .page-view {
+    flex-direction: column;
+    width: 100%;
+    scroll-snap-align: start; /* chaque page snap */
+  }
+
   .page-view.double {
     flex-direction: column;
   }
+
   .page-view.double .page {
     width: 100%;
     height: auto;
     max-height: 95%;
   }
+
+  .page {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+/* Boutons zoom */
+nav button {
+  z-index: 10;
 }
 </style>
 </head>
@@ -129,7 +155,7 @@ nav button:hover {
       </div>
     </div>
 
-    <!-- Double page -->
+    <!-- Double page transformée en simple pages sur mobile -->
     <div class="page-view double">
       <div class="page">
         <img src="Images/Page1.png" alt="Page 1">
@@ -172,7 +198,7 @@ document.getElementById('zoomOut').addEventListener('click', () => {
   book.style.transform = `scale(${scale})`;
 });
 
-/* Split double pages into single pages on mobile */
+/* Split double pages en single pages sur mobile */
 function splitPagesForMobile() {
   if(window.innerWidth <= 800) {
     const doubleViews = document.querySelectorAll('.page-view.double');
@@ -192,7 +218,7 @@ function splitPagesForMobile() {
 // Initial split
 splitPagesForMobile();
 
-// Re-split on resize
+// Re-split sur resize
 window.addEventListener('resize', () => location.reload());
 </script>
 
