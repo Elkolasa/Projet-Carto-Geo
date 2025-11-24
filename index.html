@@ -9,7 +9,7 @@
 body {
   margin: 0;
   font-family: sans-serif;
-  background: #f0f0f0;
+  background: #e5e5e5;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -36,7 +36,7 @@ nav button:hover {
   background: rgba(255,255,255,0.2);
 }
 
-/* CONTAINER DU LIVRE */
+/* CADRE GRIS (PC + MOBILE) */
 .book-container {
   flex: 1;
   width: 100vw;
@@ -46,7 +46,9 @@ nav button:hover {
   align-items: center;
   overflow: hidden;
   perspective: 800px;
-  background: #ddd;
+  background: #cfcfcf;   /* 🔥 Cadre gris uniforme */
+  padding: 15px;         /* 🔥 marge autour du livre même sur téléphone */
+  box-sizing: border-box;
 }
 
 /* SLIDER */
@@ -56,7 +58,7 @@ nav button:hover {
   transition: transform 0.5s ease;
 }
 
-/* VUE (1 page ou 2 pages) */
+/* CONTAINER DES PAGES */
 .page-view {
   width: 100%;
   height: 100%;
@@ -64,35 +66,32 @@ nav button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 20px;              /* 🔥 Espacement entre les pages (PC + mobile) */
+  box-sizing: border-box;
+  padding: 10px;
 }
 
 /* PAGE A4 */
 .page {
-  aspect-ratio: 1 / 1.414;   /* Format A4 strict */
-  height: 95%;               /* s'adapte toujours à l'écran */
-  max-height: 95%;
+  aspect-ratio: 1 / 1.414;
+  height: 95%;
   background: white;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  overflow: hidden;          /* important */
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* IMAGE À L'INTÉRIEUR (NON ROGNÉE) */
+/* IMAGE NON ROGNÉE */
 .page img {
   width: 100%;
   height: 100%;
-  object-fit: contain;        /* 🔥 L'image est TOUJOURS complète */
+  object-fit: contain;
+  display: block;
 }
 
-/* DOUBLE PAGE */
-.page-view.double .page {
-  height: 95%;
-}
-
-/* MOBILE — une page à la fois */
+/* MOBILE — une page mais avec espacement et cadre gris */
 @media (max-width: 900px) {
 
   .page-view.double {
@@ -101,7 +100,6 @@ nav button:hover {
 
   .page-view.double .page {
     width: 95%;
-    height: auto;
     max-height: 90vh;
   }
 }
@@ -145,26 +143,25 @@ nav button:hover {
 
   <div class="book" id="book">
 
-    <!-- PAGE 0 : Couverture -->
+    <!-- PAGE 0 -->
     <div class="page-view single">
       <div class="page">
         <img src="Images/Couverture.png" alt="">
       </div>
     </div>
 
-    <!-- DOUBLE PAGE 1–2 -->
+    <!-- DOUBLE PAGE -->
     <div class="page-view double">
       <div class="page"><img src="Images/Page1.png" alt=""></div>
       <div class="page"><img src="Images/Page2.png" alt=""></div>
     </div>
 
-    <!-- DOUBLE PAGE 3–4 -->
     <div class="page-view double">
       <div class="page"><img src="Images/Page3.png" alt=""></div>
       <div class="page"><img src="Images/Page4.png" alt=""></div>
     </div>
 
-    <!-- PAGE FINALE -->
+    <!-- FIN -->
     <div class="page-view single">
       <div class="page">
         <img src="Images/Dos.png" alt="">
@@ -175,7 +172,6 @@ nav button:hover {
 </div>
 
 <script>
-/* Navigation */
 let current = 0;
 let scale = 1;
 let persp = 800;
@@ -190,7 +186,6 @@ function showPage() {
   book.style.transform = `translateX(${-100 * current}%) scale(${scale})`;
 }
 
-/* Boutons mobile */
 document.getElementById("next-btn").onclick = () => {
   if (current < views().length - 1) current++;
   showPage();
@@ -200,7 +195,6 @@ document.getElementById("prev-btn").onclick = () => {
   showPage();
 };
 
-/* Clavier (PC) */
 document.addEventListener("keydown", e => {
   if (e.key === "ArrowRight" && current < views().length - 1) current++;
   if (e.key === "ArrowLeft" && current > 0) current--;
