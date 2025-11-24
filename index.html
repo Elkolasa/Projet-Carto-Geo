@@ -81,14 +81,17 @@ nav button:hover {
   height: 90%;
 }
 
-/* Mobile */
+/* Mobile : chaque slide une seule page */
 @media (max-width: 800px) {
   .book-container {
     width: 80vw;
     aspect-ratio: 2 / 1.414;
   }
   .page-view {
-    flex-direction: row;
+    flex-direction: column; /* une seule page par vue */
+  }
+  .page-view.double .page:nth-child(2) {
+    display: none; /* on cache la 2ème page sur mobile */
   }
   .page {
     height: 90%;
