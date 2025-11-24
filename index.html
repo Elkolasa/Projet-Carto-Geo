@@ -45,16 +45,16 @@ nav button:hover {
   -webkit-overflow-scrolling: touch;
   width: 100vw;
   height: 100vh;
-  gap: 20px;
-  padding: 20px;
+  gap: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 /* Chaque page */
 .page {
-  flex: 0 0 90%;
-  scroll-snap-align: center;
-  aspect-ratio: 1 / 1.414;
+  flex: 0 0 100vw; /* chaque page prend toute la largeur du viewport */
+  scroll-snap-align: start;
+  aspect-ratio: 1 / 1.414; /* format A4 */
   background: white;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
   display: flex;
