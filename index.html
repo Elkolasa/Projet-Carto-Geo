@@ -39,7 +39,7 @@ nav button:hover {
   background-color: rgba(255,255,255,0.2);
 }
 
-/* Container du livre - ratio A3 (double A4) */
+/* Container du livre */
 .book-container {
   width: 80vw;               
   max-width: 1200px;
@@ -52,7 +52,7 @@ nav button:hover {
   background: #e6e6e6;
 }
 
-/* Book slider */
+/* Slider */
 .book {
   display: flex;
   transition: transform 0.6s ease;
@@ -71,44 +71,44 @@ nav button:hover {
   overflow: hidden;
 }
 
-/* Page au format A4 */
+/* Page A4 */
 .page {
-  aspect-ratio: 1 / 1.414;   
-  height: 90%;               
+  aspect-ratio: 1 / 1.414;
+  height: 90%;
   width: auto;
   background: white;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 0;
 }
 
-/* Double page (A3) - rien à changer, flex gère la largeur */
+/* Image non rognée */
+.page img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* <-- aucune coupe */
+  display: block;
+}
+
+/* Double page */
 .page-view.double .page {
   height: 90%;
 }
 
-/* Mobile : même affichage, juste plus petit */
+/* Mobile */
 @media (max-width: 800px) {
   .book-container {
     width: 80vw;
-    aspect-ratio: 2 / 1.414; 
-  }
-  .page-view {
-    flex-direction: row;     
-  }
-  .page {
-    height: 90%;
   }
 
-  /* Mobile : chaque page séparée */
   .page-view.double {
     flex-direction: column;
     width: 100%;
   }
+
   .page-view.double .page {
     width: 100%;
     height: auto;
@@ -155,27 +155,27 @@ nav button:hover {
 
     <!-- Couverture avant -->
     <div class="page-view single">
-<div class="page" style="
-    background: url('Images/Couverture.png');
-    background-size: cover;
-    background-position: center;
-"></div>
+      <div class="page">
+        <img src="Images/Couverture.png" alt="">
+      </div>
     </div>
 
     <!-- Double page -->
     <div class="page-view double">
-      <div class="page" style="background:#ffdddd;">Page 1</div>
-      <div class="page" style="background:#ddffdd;">Page 2</div>
+      <div class="page"><img src="Images/Page1.png" alt=""></div>
+      <div class="page"><img src="Images/Page2.png" alt=""></div>
     </div>
 
     <div class="page-view double">
-      <div class="page" style="background:#ddddff;">Page 3</div>
-      <div class="page" style="background:#ffffdd;">Page 4</div>
+      <div class="page"><img src="Images/Page3.png" alt=""></div>
+      <div class="page"><img src="Images/Page4.png" alt=""></div>
     </div>
 
     <!-- Couverture arrière -->
     <div class="page-view single">
-      <div class="page" style="background:#aaffaa;">Dos</div>
+      <div class="page">
+        <img src="Images/Dos.png" alt="">
+      </div>
     </div>
 
   </div>
@@ -183,16 +183,14 @@ nav button:hover {
 
 <script>
 const book = document.getElementById('book');
-const views = () => document.querySelectorAll('.page-view'); // dynamique après split
+const views = () => document.querySelectorAll('.page-view');
 let currentView = 0;
 
-/* Navigation base */
+/* Navigation */
 function showView(index){
-  const offset = -100 * index;
-  book.style.transform = `translateX(${offset}%) scale(${scale})`;
+  book.style.transform = `translateX(${-100 * index}%) scale(${scale})`;
 }
 
-/* Clavier */
 document.addEventListener('keydown', (e) => {
   const allViews = views();
   if(e.key === 'ArrowRight' && currentView < allViews.length - 1) currentView++;
@@ -237,7 +235,7 @@ document.getElementById('perspective').addEventListener('click', () => {
   updateTransform();
 });
 
-/* Split double pages into single pages on mobile */
+/* Split double pages on mobile */
 function splitPagesForMobile() {
   if(window.innerWidth <= 800) {
     const doubleViews = document.querySelectorAll('.page-view.double');
@@ -254,20 +252,15 @@ function splitPagesForMobile() {
   }
 }
 
-// Initial split
 splitPagesForMobile();
 
-// Re-split on resize (reload page to avoid duplication)
 window.addEventListener('resize', () => {
   location.reload();
 });
 
-/* Initialisation */
 showView(currentView);
 updateTransform();
 </script>
 
 </body>
-
 </html>
-
