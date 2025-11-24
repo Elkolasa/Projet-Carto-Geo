@@ -31,16 +31,16 @@
         height: 100%;
         position: absolute;
         top: 0;
-        right: 100%; /* hors écran par défaut */
+        left: 100%; /* hors écran par défaut */
         background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
-        transition: right 0.5s ease;
+        transition: left 0.5s ease;
     }
 
-    .page.active { right: 0; }
-    .page.prev { right: -100%; }
-    .page.next { right: 100%; }
+    .page.active { left: 0; }
+    .page.prev { left: -100%; }
+    .page.next { left: 100%; }
 </style>
 </head>
 <body>
