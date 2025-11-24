@@ -64,6 +64,7 @@ nav button:hover {
   box-sizing: border-box;
   padding: 20px;
   transition: transform 0.3s;
+  transform-origin: center center;
 }
 
 /* Zoom effect hover (desktop optionnel) */
@@ -99,26 +100,40 @@ const container = document.getElementById('bookContainer');
 const pages = container.querySelectorAll('.page');
 let scale = 1;
 
-/* Zoom */
+/* Appliquer le zoom à chaque page */
+function updateZoom() {
+  pages.forEach(p => {
+    p.style.transform = `scale(${scale})`;
+  });
+}
+
+/* Zoom boutons */
 document.getElementById('zoomIn').addEventListener('click', () => {
   scale = Math.min(scale + 0.1, 3);
-  pages.forEach(p => p.style.transform = `scale(${scale})`);
+  updateZoom();
 });
 
 document.getElementById('zoomOut').addEventListener('click', () => {
   scale = Math.max(scale - 0.1, 0.5);
-  pages.forEach(p => p.style.transform = `scale(${scale})`);
+  updateZoom();
 });
 
 /* Navigation clavier */
 document.addEventListener('keydown', (e) => {
-  const scrollAmount = container.clientWidth; // scroll largeur visible
+  const scrollAmount = container.clientWidth;
   if(e.key === 'ArrowRight') {
     container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   }
   if(e.key === 'ArrowLeft') {
     container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
   }
+});
+
+/* Centrer la première page au chargement */
+window.addEventListener('load', () => {
+  container.scrollLeft = 0;
+  scale = 1;
+  updateZoom();
 });
 </script>
 
