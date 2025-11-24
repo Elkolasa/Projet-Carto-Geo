@@ -13,7 +13,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Navbar */
+/* Navbar pour zoom */
 nav {
   display: flex;
   justify-content: flex-end;
@@ -37,7 +37,7 @@ nav button:hover {
   background-color: rgba(255,255,255,0.2);
 }
 
-/* Container pour scroll horizontal */
+/* Container scroll horizontal */
 .book-container {
   display: flex;
   overflow-x: auto;
@@ -66,7 +66,7 @@ nav button:hover {
   transition: transform 0.3s;
 }
 
-/* Zoom effect on hover (desktop optional) */
+/* Zoom effect hover (desktop optionnel) */
 .page:hover {
   transform: scale(1.05);
 }
@@ -108,17 +108,6 @@ document.getElementById('zoomIn').addEventListener('click', () => {
 document.getElementById('zoomOut').addEventListener('click', () => {
   scale = Math.max(scale - 0.1, 0.5);
   pages.forEach(p => p.style.transform = `scale(${scale})`);
-});
-
-/* Navigation clavier */
-document.addEventListener('keydown', (e) => {
-  const scrollAmount = container.clientWidth; // scroll full page width
-  if(e.key === 'ArrowRight') {
-    container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-  }
-  if(e.key === 'ArrowLeft') {
-    container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-  }
 });
 </script>
 
