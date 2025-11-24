@@ -3,177 +3,168 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Livre A4 / A3 avec Zoom et Perspective</title>
+<title>Livre A4/A3 - NON ROGNÉ - Responsive</title>
 
 <style>
 body {
   margin: 0;
+  font-family: sans-serif;
+  background: #f0f0f0;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  background: #f0f0f0;
-  font-family: sans-serif;
+  height: 100vh;
 }
 
-/* Navbar */
+/* NAVBAR */
 nav {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   padding: 10px 20px;
-  background-color: #333;
+  background: #333;
 }
-
 nav button {
   background: none;
   border: none;
   color: white;
+  padding: 8px 12px;
   font-size: 18px;
   cursor: pointer;
-  padding: 8px;
   border-radius: 5px;
-  transition: background 0.2s;
 }
-
 nav button:hover {
-  background-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.2);
 }
 
-/* Container du livre */
+/* CONTAINER DU LIVRE */
 .book-container {
-  width: 90vw;
-  max-width: 1200px;
-  height: 80vh;              /* <-- Hauteur fixe adaptée mobile */
-  overflow: hidden;
-  position: relative;
-  margin: auto;
   flex: 1;
-  perspective: 500px;
-  background: #e6e6e6;
+  width: 100vw;
+  height: calc(100vh - 60px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  perspective: 800px;
+  background: #ddd;
 }
 
-/* Slider */
+/* SLIDER */
 .book {
   display: flex;
   height: 100%;
-  transition: transform 0.6s ease;
+  transition: transform 0.5s ease;
 }
 
-/* Vue contenant une ou deux pages */
+/* VUE (1 page ou 2 pages) */
 .page-view {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
+  height: 100%;
   flex-shrink: 0;
-  gap: 10px;
-  overflow: hidden;
-}
-
-/* Page A4 – version mobile friendly */
-.page {
-  aspect-ratio: 1 / 1.414;       /* Ratio A4 */
-  width: auto;
-  height: 100%;                  /* Toujours adapté à l'écran */
-  max-height: 100%;
-  background: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
-  overflow: hidden;
+  gap: 10px;
 }
 
-/* L'image à l’intérieur */
+/* PAGE A4 */
+.page {
+  aspect-ratio: 1 / 1.414;   /* Format A4 strict */
+  height: 95%;               /* s'adapte toujours à l'écran */
+  max-height: 95%;
+  background: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  overflow: hidden;          /* important */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* IMAGE À L'INTÉRIEUR (NON ROGNÉE) */
 .page img {
   width: 100%;
   height: 100%;
-  object-fit: contain;           /* <-- JAMAIS ROGNÉE */
-  display: block;
+  object-fit: contain;        /* 🔥 L'image est TOUJOURS complète */
 }
 
-/* Double page desktop */
+/* DOUBLE PAGE */
 .page-view.double .page {
-  height: 100%;
+  height: 95%;
 }
 
-/* Mobile */
-@media (max-width: 800px) {
-
-  .book-container {
-    width: 100vw;
-    height: 85vh;
-  }
+/* MOBILE — une page à la fois */
+@media (max-width: 900px) {
 
   .page-view.double {
-    flex-direction: column;
+    flex-direction: column !important;
   }
 
   .page-view.double .page {
-    width: 100%;
+    width: 95%;
     height: auto;
     max-height: 90vh;
   }
 }
 
-/* Boutons mobile */
+/* BOUTONS MOBILE */
 .nav-btn {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
-  color: white;
+  padding: 10px 18px;
   border: none;
-  font-size: 2rem;
-  padding: 0.5rem 1rem;
+  font-size: 30px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.4);
+  color: white;
   cursor: pointer;
-  z-index: 10;
+  transform: translateY(-50%);
+  z-index: 100;
 }
-
 #prev-btn { left: 10px; }
 #next-btn { right: 10px; }
 
-@media (min-width: 801px) {
+@media (min-width: 901px) {
   .nav-btn { display: none; }
 }
 </style>
 </head>
 <body>
 
-<!-- Navbar -->
+<!-- NAVBAR -->
 <nav>
   <button id="zoomIn">🔍+</button>
   <button id="zoomOut">🔍-</button>
   <button id="perspective">🌀</button>
 </nav>
 
-<!-- Livre -->
+<!-- LIVRE -->
 <div class="book-container" id="bookContainer">
+
   <button class="nav-btn" id="prev-btn">&#8592;</button>
   <button class="nav-btn" id="next-btn">&#8594;</button>
 
   <div class="book" id="book">
 
-    <!-- Couverture avant -->
+    <!-- PAGE 0 : Couverture -->
     <div class="page-view single">
       <div class="page">
         <img src="Images/Couverture.png" alt="">
       </div>
     </div>
 
-    <!-- Double pages -->
+    <!-- DOUBLE PAGE 1–2 -->
     <div class="page-view double">
       <div class="page"><img src="Images/Page1.png" alt=""></div>
       <div class="page"><img src="Images/Page2.png" alt=""></div>
     </div>
 
+    <!-- DOUBLE PAGE 3–4 -->
     <div class="page-view double">
       <div class="page"><img src="Images/Page3.png" alt=""></div>
       <div class="page"><img src="Images/Page4.png" alt=""></div>
     </div>
 
-    <!-- Couverture arrière -->
+    <!-- PAGE FINALE -->
     <div class="page-view single">
       <div class="page">
         <img src="Images/Dos.png" alt="">
@@ -184,73 +175,56 @@ nav button:hover {
 </div>
 
 <script>
-const book = document.getElementById('book');
-const bookContainer = document.getElementById('bookContainer');
-let currentView = 0;
+/* Navigation */
+let current = 0;
 let scale = 1;
-let perspective = 500;
+let persp = 800;
+const book = document.getElementById("book");
+const container = document.getElementById("bookContainer");
 
 function views() {
-  return document.querySelectorAll('.page-view');
+  return document.querySelectorAll(".page-view");
 }
 
-function showView(index) {
-  book.style.transform = `translateX(${-100 * index}%) scale(${scale})`;
+function showPage() {
+  book.style.transform = `translateX(${-100 * current}%) scale(${scale})`;
 }
 
-document.getElementById('prev-btn').onclick = () => {
-  if (currentView > 0) currentView--;
-  showView(currentView);
+/* Boutons mobile */
+document.getElementById("next-btn").onclick = () => {
+  if (current < views().length - 1) current++;
+  showPage();
+};
+document.getElementById("prev-btn").onclick = () => {
+  if (current > 0) current--;
+  showPage();
 };
 
-document.getElementById('next-btn').onclick = () => {
-  if (currentView < views().length - 1) currentView++;
-  showView(currentView);
+/* Clavier (PC) */
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight" && current < views().length - 1) current++;
+  if (e.key === "ArrowLeft" && current > 0) current--;
+  showPage();
+});
+
+/* ZOOM */
+document.getElementById("zoomIn").onclick = () => {
+  scale = Math.min(3, scale + 0.1);
+  showPage();
+};
+document.getElementById("zoomOut").onclick = () => {
+  scale = Math.max(0.5, scale - 0.1);
+  showPage();
 };
 
-/* Zoom */
-function updateTransform() {
-  book.style.transform = `translateX(${-100 * currentView}%) scale(${scale})`;
-  bookContainer.style.perspective = `${perspective}px`;
-}
-
-document.getElementById('zoomIn').onclick = () => {
-  scale = Math.min(scale + 0.1, 3);
-  updateTransform();
+/* PERSPECTIVE */
+document.getElementById("perspective").onclick = () => {
+  persp = (persp === 800) ? 1500 : 800;
+  container.style.perspective = persp + "px";
 };
 
-document.getElementById('zoomOut').onclick = () => {
-  scale = Math.max(scale - 0.1, 0.5);
-  updateTransform();
-};
-
-document.getElementById('perspective').onclick = () => {
-  perspective = (perspective === 500) ? 1000 : 500;
-  updateTransform();
-};
-
-/* Split double pages on mobile */
-function splitPagesForMobile() {
-  if (window.innerWidth <= 800) {
-    const doubleViews = document.querySelectorAll('.page-view.double');
-    doubleViews.forEach(view => {
-      const pages = Array.from(view.children);
-      pages.forEach(page => {
-        const newView = document.createElement('div');
-        newView.className = 'page-view single';
-        newView.appendChild(page);
-        view.parentNode.insertBefore(newView, view);
-      });
-      view.remove();
-    });
-  }
-}
-
-splitPagesForMobile();
-showView(currentView);
-updateTransform();
-
-window.addEventListener('resize', () => location.reload());
+/* INITIAL */
+showPage();
 </script>
 
 </body>
