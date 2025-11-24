@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Livre A4 / A3 avec Zoom et Perspective</title>
+<title>Livre A4 / A3 - Correctif Responsive</title>
 <style>
 body {
   margin: 0;
@@ -38,17 +38,19 @@ nav button:hover {
   background-color: rgba(255,255,255,0.2);
 }
 
-/* Container du livre - ratio A3 (double A4) */
+/* Container du livre */
 .book-container {
-  width: 80vw;               
+  width: 80vw;
   max-width: 1200px;
-  aspect-ratio: 2 / 1.414;   
+  aspect-ratio: 2 / 1.414;
   overflow: hidden;
   position: relative;
   margin: auto;
   flex: 1;
-  perspective: 500px;
-  background: #e6e6e6;
+  background: #e6e6e6; /* fond gris uniforme */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Book slider */
@@ -72,37 +74,35 @@ nav button:hover {
 
 /* Page au format A4 */
 .page {
-  aspect-ratio: 1 / 1.414;   
-  height: 90%;               
-  width: auto;
-  background: white;
+  aspect-ratio: 1 / 1.414;
+  height: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
   box-sizing: border-box;
   padding: 20px;
 }
 
-/* Double page (A3) */
-.page-view.double .page {
-  height: 90%;
+/* PC : image plein cadre */
+@media (min-width: 801px) {
+  .page {
+    background-size: cover;
+  }
 }
 
-/* Mobile : chaque page séparée */
+/* Mobile : image visible 100%, jamais rognée */
 @media (max-width: 800px) {
   .book-container {
     width: 80vw;
-    aspect-ratio: 2 / 1.414; 
+    height: 80vh;
+    aspect-ratio: auto;
   }
   .page-view {
-    flex-direction: row;     
+    flex-direction: row;
   }
-  .page {
-    height: 90%;
-  }
-
   .page-view.double {
     flex-direction: column;
     width: 100%;
@@ -110,6 +110,14 @@ nav button:hover {
   .page-view.double .page {
     width: 100%;
     height: auto;
+    max-height: 95%;
+    background-size: contain;
+  }
+  .page {
+    height: 100%;
+    width: auto;
+    max-width: 48%;
+    background-size: contain;
   }
 }
 
@@ -141,7 +149,6 @@ nav button:hover {
 <nav>
   <button id="zoomIn" title="Zoom In">🔍+</button>
   <button id="zoomOut" title="Zoom Out">🔍-</button>
-  <button id="perspective" title="Toggle Perspective">🌀</button>
 </nav>
 
 <!-- Livre -->
@@ -155,8 +162,6 @@ nav button:hover {
     <div class="page-view single">
       <div class="page" style="
         background: url('Images/Couverture.png');
-        background-size: cover;
-        background-position: center;
       "></div>
     </div>
 
@@ -181,8 +186,9 @@ nav button:hover {
 
 <script>
 const book = document.getElementById('book');
-const views = () => document.querySelectorAll('.page-view'); 
+const views = () => document.querySelectorAll('.page-view');
 let currentView = 0;
+let scale = 1;
 
 /* Navigation */
 function showView(index){
@@ -209,27 +215,14 @@ document.getElementById('next-btn').addEventListener('click', () => {
   showView(currentView);
 });
 
-/* Zoom + perspective */
-const bookContainer = document.getElementById('bookContainer');
-let scale = 1;
-let perspective = 500;
-
-function updateTransform() {
-  book.style.transform = `translateX(${-100 * currentView}%) scale(${scale})`;
-  bookContainer.style.perspective = `${perspective}px`;
-}
-
+/* Zoom */
 document.getElementById('zoomIn').addEventListener('click', () => {
   scale = Math.min(scale + 0.1, 3);
-  updateTransform();
+  showView(currentView);
 });
 document.getElementById('zoomOut').addEventListener('click', () => {
   scale = Math.max(scale - 0.1, 0.5);
-  updateTransform();
-});
-document.getElementById('perspective').addEventListener('click', () => {
-  perspective = (perspective === 500) ? 1000 : 500;
-  updateTransform();
+  showView(currentView);
 });
 
 /* Split double pages into single pages on mobile */
@@ -257,9 +250,8 @@ window.addEventListener('resize', () => {
   location.reload();
 });
 
-/* Initialisation */
+// Initialisation
 showView(currentView);
-updateTransform();
 </script>
 
 </body>
