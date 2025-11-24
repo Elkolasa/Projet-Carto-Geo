@@ -93,8 +93,8 @@ window.addEventListener('touchend', e => {
 
 // Flèches clavier
 window.addEventListener('keydown', e => {
-    if(e.key === 'ArrowRight' && currentIndex < pages.length - 1) showPage(currentIndex + 1);
-    if(e.key === 'ArrowLeft' && currentIndex > 0) showPage(currentIndex - 1);
+    if(e.key === 'ArrowLeft' && currentIndex < pages.length - 1) showPage(currentIndex + 1);
+    if(e.key === 'ArrowRight' && currentIndex > 0) showPage(currentIndex - 1);
 });
 
 // Zoom tactile
@@ -125,3 +125,4 @@ showPage(currentIndex);
 
 </body>
 </html>
+
