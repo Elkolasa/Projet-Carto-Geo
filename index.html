@@ -37,7 +37,7 @@ nav button:hover {
   background-color: rgba(255,255,255,0.2);
 }
 
-/* Container scroll horizontal */
+/* Container scroll horizontal avec centrage */
 .book-container {
   display: flex;
   overflow-x: auto;
@@ -45,15 +45,15 @@ nav button:hover {
   -webkit-overflow-scrolling: touch;
   width: 100vw;
   height: 100vh;
-  gap: 0;
-  padding: 0;
+  gap: 20px;
+  padding: 0 10vw; /* padding pour centrer la page */
   box-sizing: border-box;
 }
 
 /* Chaque page */
 .page {
-  flex: 0 0 100vw; /* chaque page prend toute la largeur du viewport */
-  scroll-snap-align: start;
+  flex: 0 0 80vw; /* largeur visible 80% du viewport pour centrer avec padding */
+  scroll-snap-align: center;
   aspect-ratio: 1 / 1.414; /* format A4 */
   background: white;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
@@ -114,13 +114,13 @@ document.getElementById('zoomIn').addEventListener('click', () => {
 });
 
 document.getElementById('zoomOut').addEventListener('click', () => {
-  scale = Math.max(scale - 0.1, 0.5);
+  scale = Math.max(scale - 0.1, 1); // zoom minimum 1 par défaut
   updateZoom();
 });
 
 /* Navigation clavier */
 document.addEventListener('keydown', (e) => {
-  const scrollAmount = container.clientWidth;
+  const scrollAmount = container.clientWidth * 0.8; // scroll largeur page
   if(e.key === 'ArrowRight') {
     container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   }
@@ -129,11 +129,11 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-/* Centrer la première page au chargement */
+/* Centrer la première page au chargement et reset zoom */
 window.addEventListener('load', () => {
-  container.scrollLeft = 0;
   scale = 1;
   updateZoom();
+  container.scrollLeft = 0; // première page bien centrée
 });
 </script>
 
