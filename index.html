@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Livre A4 / A3 - Scroll Mobile</title>
+<title>Livre A4 / A3 - Images Pleine Page</title>
 <style>
 body {
   margin: 0;
@@ -43,20 +43,20 @@ nav button:hover {
   width: 80vw;
   max-width: 1200px;
   aspect-ratio: 2 / 1.414;
-  overflow: hidden;
+  overflow-x: auto; /* scroll horizontal sur mobile */
+  overflow-y: hidden;
   position: relative;
   margin: auto;
   flex: 1;
-  background: #e6e6e6; /* fond gris */
+  background: #e6e6e6; /* fond gris uniforme */
   display: flex;
-  justify-content: center;
   align-items: center;
+  scroll-snap-type: x mandatory;
 }
 
 /* Book slider */
 .book {
   display: flex;
-  transition: transform 0.6s ease;
   height: 100%;
   transform-origin: center center;
 }
@@ -69,74 +69,43 @@ nav button:hover {
   width: 100%;
   flex-shrink: 0;
   gap: 10px;
-  overflow: hidden;
+  scroll-snap-align: start;
 }
 
 /* Page au format A4 */
 .page {
+  position: relative;
   aspect-ratio: 1 / 1.414;
   height: 90%;
-  background-position: center;
-  background-repeat: no-repeat;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
   display: flex;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box;
-  padding: 20px;
+  background: #fff;
+  overflow: hidden;
 }
 
-/* PC : image plein cadre */
-@media (min-width: 801px) {
-  .page {
-    background-size: cover;
-  }
+/* L'image à l'intérieur de la page */
+.page img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* jamais rognée, remplie la page */
+  display: block;
 }
 
-/* Mobile : image visible 100%, jamais rognée, scroll horizontal */
+/* Mobile : double page verticale et page plus large */
 @media (max-width: 800px) {
   .book-container {
     width: 90vw;
     height: 80vh;
-    overflow-x: auto; /* scroll horizontal activé */
-    overflow-y: hidden;
-    display: flex;
-    background: #e6e6e6;
-    scroll-snap-type: x mandatory; /* pour “snap” sur chaque page */
   }
-
-  .book {
-    flex-direction: row;
-    height: 100%;
-    scroll-snap-type: x mandatory;
-  }
-
-  .page-view {
-    flex-direction: row;
-    scroll-snap-align: start;
-  }
-
   .page-view.double {
     flex-direction: column;
   }
-
   .page-view.double .page {
     width: 100%;
     height: auto;
     max-height: 95%;
-    background-size: contain;
-  }
-
-  .page {
-    height: 100%;
-    width: auto;
-    max-width: 48%;
-    background-size: contain;
-  }
-
-  /* Masquer boutons navigation */
-  .nav-btn {
-    display: none;
   }
 }
 </style>
@@ -155,25 +124,35 @@ nav button:hover {
 
     <!-- Couverture avant -->
     <div class="page-view single">
-      <div class="page" style="
-        background: url('Images/Couverture.png');
-      "></div>
+      <div class="page">
+        <img src="Images/Couverture.png" alt="Couverture">
+      </div>
     </div>
 
     <!-- Double page -->
     <div class="page-view double">
-      <div class="page" style="background:#ffdddd;">Page 1</div>
-      <div class="page" style="background:#ddffdd;">Page 2</div>
+      <div class="page">
+        <img src="Images/Page1.png" alt="Page 1">
+      </div>
+      <div class="page">
+        <img src="Images/Page2.png" alt="Page 2">
+      </div>
     </div>
 
     <div class="page-view double">
-      <div class="page" style="background:#ddddff;">Page 3</div>
-      <div class="page" style="background:#ffffdd;">Page 4</div>
+      <div class="page">
+        <img src="Images/Page3.png" alt="Page 3">
+      </div>
+      <div class="page">
+        <img src="Images/Page4.png" alt="Page 4">
+      </div>
     </div>
 
     <!-- Couverture arrière -->
     <div class="page-view single">
-      <div class="page" style="background:#aaffaa;">Dos</div>
+      <div class="page">
+        <img src="Images/Dos.png" alt="Dos">
+      </div>
     </div>
 
   </div>
