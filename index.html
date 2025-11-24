@@ -85,8 +85,25 @@ nav button:hover {
   object-fit: cover;
 }
 
-/* Mobile styles */
+/* Navigation flèches PC */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+#prev-btn { left: 10px; }
+#next-btn { right: 10px; }
+
 @media (max-width: 800px) {
+  /* Mobile : scroll horizontal par page */
   .book-container {
     width: 90vw;
     height: 80vh;
@@ -113,6 +130,8 @@ nav button:hover {
     height: 100%;
     width: 100%;
   }
+  /* Masquer flèches */
+  .nav-btn { display: none; }
 }
 </style>
 </head>
@@ -124,6 +143,9 @@ nav button:hover {
 </nav>
 
 <div class="book-container" id="bookContainer">
+  <button class="nav-btn" id="prev-btn">&#8592;</button>
+  <button class="nav-btn" id="next-btn">&#8594;</button>
+
   <div class="book" id="book">
 
     <!-- Couverture -->
@@ -167,15 +189,27 @@ const book = document.getElementById('book');
 let currentView = 0;
 let scale = 1;
 
+/* Navigation flèches PC */
+const views = () => document.querySelectorAll('.page-view');
+
 function showView(index) {
   const offset = -100 * index;
   book.style.transform = `translateX(${offset}%) scale(${scale})`;
 }
 
-/* Navigation clavier pour PC */
+/* Flèches */
+document.getElementById('prev-btn').addEventListener('click', () => {
+  if(currentView > 0) currentView--;
+  showView(currentView);
+});
+document.getElementById('next-btn').addEventListener('click', () => {
+  if(currentView < views().length - 1) currentView++;
+  showView(currentView);
+});
+
+/* Clavier PC */
 document.addEventListener('keydown', e => {
-  const views = document.querySelectorAll('.page-view');
-  if(e.key === 'ArrowRight' && currentView < views.length - 1) currentView++;
+  if(e.key === 'ArrowRight' && currentView < views().length -1) currentView++;
   if(e.key === 'ArrowLeft' && currentView > 0) currentView--;
   showView(currentView);
 });
@@ -210,10 +244,10 @@ function splitPagesMobile() {
 // Initial split mobile
 splitPagesMobile();
 
-// Re-split on resize
+// Re-split sur resize
 window.addEventListener('resize', () => location.reload());
 
-// Initial display
+// Affichage initial
 showView(currentView);
 </script>
 
