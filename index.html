@@ -27,7 +27,6 @@ body {
     box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
 
-/* Toutes les pages au même endroit */
 .page {
     width: 100%;
     height: 100%;
@@ -39,25 +38,16 @@ body {
     background-position: center;
     background-repeat: no-repeat;
 
-    /* par défaut la page est à droite (comme un vrai livre fermé) */
-    transform: translateX(100%);
+    transform: translateX(100%); /* pages stockées à droite */
     transition: transform 0.45s ease-in-out;
 }
 
-/* Page visible */
 .page.active {
     transform: translateX(0);
 }
 
-/* Page qui sort vers la gauche (on avance dans le livre) */
-.page.go-left {
-    transform: translateX(-100%);
-}
-
-/* Page qui sort vers la droite (on revient dans le livre) */
-.page.go-right {
-    transform: translateX(100%);
-}
+.page.go-left { transform: translateX(-100%); }
+.page.go-right { transform: translateX(100%); }
 </style>
 </head>
 <body>
@@ -73,25 +63,38 @@ body {
 const pages = document.querySelectorAll(".page");
 let current = 0;
 
+function resetPageClasses(p) {
+    p.classList.remove("active", "go-left", "go-right");
+}
+
 function showPage(target) {
     if (target === current) return;
 
-    const forward = target > current;   // avance dans le livre ?
+    const forward = target > current; // avance dans le livre ?
 
-    pages[current].classList.remove("active", "go-left", "go-right");
-    pages[target].classList.remove("go-left", "go-right");
+    const oldPage = pages[current];
+    const newPage = pages[target];
+
+    // Reset future page
+    resetPageClasses(newPage);
 
     // Page qui sort
-    pages[current].classList.add(forward ? "go-left" : "go-right");
+    oldPage.classList.remove("active");
+    oldPage.classList.add(forward ? "go-left" : "go-right");
 
-    // Positionner la future page hors écran au bon côté
-    pages[target].style.transform = forward ? "translateX(100%)" : "translateX(-100%)";
-
-    // Reflow pour activer l'anim
-    void pages[target].offsetWidth;
+    // Positionner la nouvelle page au bon côté
+    newPage.style.transform = forward ? "translateX(100%)" : "translateX(-100%)";
+    void newPage.offsetWidth; // reflow pour appliquer l'anim
 
     // Page qui entre
-    pages[target].classList.add("active");
+    newPage.classList.add("active");
+
+    // Une fois la transition FINIE → reset pour pouvoir revenir
+    oldPage.addEventListener("transitionend", function handler() {
+        resetPageClasses(oldPage);
+        oldPage.style.transform = "translateX(100%)"; // stockage à droite
+        oldPage.removeEventListener("transitionend", handler);
+    });
 
     current = target;
 }
@@ -108,7 +111,7 @@ window.addEventListener("wheel", e => {
     setTimeout(() => lock = false, 500);
 });
 
-// Fleches
+// Flèches
 window.addEventListener("keydown", e => {
     if (e.key === "ArrowRight" && current < pages.length - 1) showPage(current + 1);
     if (e.key === "ArrowLeft" && current > 0) showPage(current - 1);
